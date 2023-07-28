@@ -45,7 +45,7 @@ const BoardDetail = ({ postList }) => {
       <DetailBlock>
         <PostTitle>{post && post.title}</PostTitle>
         {postLoading ? (
-          <h2>loading...</h2>
+          <h2>loading..</h2>
         ) : (
           <PostContent>{post && post.content}</PostContent>
         )}
