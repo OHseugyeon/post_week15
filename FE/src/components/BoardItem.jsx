@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const BoardItemBlock = styled.div`
@@ -28,11 +29,16 @@ const BoardItemBlock = styled.div`
   }
 `;
 
-const BoardItem = () => {
+const BoardItem = ({ title, postID }) => {
+  const navigate = useNavigate();
+
+  const goPost = () => {
+    navigate(`/post/${postID}`);
+  };
   return (
     <BoardItemBlock>
       <div className="contents">
-        <h2>제목 자리지롱</h2>
+        <h2 onClick={goPost}>{title}</h2>
         <p>자세한 내용은 제목 클릭!</p>
       </div>
     </BoardItemBlock>
