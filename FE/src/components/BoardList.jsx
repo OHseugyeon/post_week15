@@ -1,9 +1,7 @@
-// 게시판 목록 조회
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BoardItem from './BoardItem';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const BoardListBlock = styled.div`
   box-sizing: border-box;
@@ -19,27 +17,34 @@ const BoardListBlock = styled.div`
   }
 `;
 
-const BoardList = ({ postList }) => {
-  const navigate = useNavigate();
-  // 요청 대기 : true, 요청 끝 : false
+const BoardList = () => {
+  const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 대기 중인 상태라면
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // API 호출
+        const response = await axios.get('http://127.0.0.1:8000/posts');
+        setPostList(response.data); // API 응답으로 받은 데이터를 state에 저장
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      setLoading(false); // 로딩 상태 변경
+    };
+    fetchData(); // useEffect에서 fetchData 함수 호출
+  }, []);
+
   if (loading) {
     return <BoardListBlock>대기중...</BoardListBlock>;
   }
 
   return (
     <BoardListBlock>
-      {postList &&
-        postList.map((e) => (
-          <BoardItem
-            key={e.postID}
-            postID={e.postID}
-            title={e.title}
-            content={e.content}
-          />
-        ))}
+      {postList.map((e) => (
+        <BoardItem key={e.id} postID={e.id} title={e.title} />
+      ))}
     </BoardListBlock>
   );
 };

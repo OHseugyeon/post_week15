@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+// 스타일 코드 생략
 const BoardItemBlock = styled.div`
   display: flex;
 
@@ -35,6 +36,7 @@ const BoardItem = ({ title, postID }) => {
   const goPost = () => {
     navigate(`/post/${postID}`);
   };
+
   return (
     <BoardItemBlock>
       <div className="contents">

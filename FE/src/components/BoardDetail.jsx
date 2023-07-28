@@ -23,23 +23,18 @@ const PostContent = styled.div`
   margin-top: 1rem;
 `;
 
-const BoardDetail = ({ postList }) => {
+const BoardDetail = () => {
   const { postID } = useParams();
   const [post, setPost] = useState(null);
   const [postLoading, setPostLoading] = useState(true);
 
   useEffect(() => {
-    // postID에 해당하는 게시물을 찾기
-    const targetPost = postList.find(
-      (item) => item.postID === parseInt(postID),
-    );
-    if (targetPost) {
-      setPost(targetPost);
+    axios.get(`http://127.0.0.1:8000/posts/${postID}`).then((response) => {
+      setPost(response.data);
       setPostLoading(false);
-    } else {
-      // 해당 postID에 해당하는 게시물이 없는 경우, 예외 처리
-    }
-  }, [postID, postList]);
+    });
+  }, []);
+
   return (
     <>
       <DetailBlock>

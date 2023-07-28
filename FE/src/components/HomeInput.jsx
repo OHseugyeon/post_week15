@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import BoardList from './BoardList';
+import axios from 'axios';
 
 const InputDiv = styled.div`
   width: 100%;
@@ -64,14 +65,13 @@ const InputDiv = styled.div`
   }
 `;
 
-const HomeInput = ({ postList, setPostList }) => {
+const HomeInput = () => {
   const [inputs, setInputs] = useState({
     title: '',
     content: '',
   });
 
   const { title, content } = inputs;
-
   const onChange = (e) => {
     const { value, name } = e.target;
     setInputs({
@@ -81,21 +81,24 @@ const HomeInput = ({ postList, setPostList }) => {
   };
 
   const onSubmit = () => {
-    // 새로운 게시물 객체 생성
-    const newPost = {
-      postID: postList.length + 1, // 현재 게시물 개수 + 1로 ID 생성 (임시로 사용)
-      title: title,
-      content: content,
-    };
+    try {
+      // HTTP POST 요청으로 새로운 게시물 생성
+      axios
+        .post('http://127.0.0.1:8000/posts', {
+          title: inputs.title,
+          content: inputs.content,
+        })
+        .then(() => window.location.reload());
 
-    // 기존의 게시물 목록에 새로운 게시물 추가
-    setPostList([...postList, newPost]);
-
-    // 입력값 초기화
-    setInputs({
-      title: '',
-      content: '',
-    });
+      // 입력값 초기화
+      setInputs({
+        title: '',
+        content: '',
+      });
+    } catch (error) {
+      // 에러 발생 시 에러 처리
+      console.error('Error creating new post:', error);
+    }
   };
 
   return (
@@ -117,7 +120,7 @@ const HomeInput = ({ postList, setPostList }) => {
           저장
         </div>
       </InputDiv>
-      <BoardList postList={postList} title={title} content={content} />
+      <BoardList />
     </>
   );
 };
